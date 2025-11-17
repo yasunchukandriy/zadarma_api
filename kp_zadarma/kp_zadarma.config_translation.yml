@@ -1,0 +1,5 @@
+kp_zadarma.settings:
+  title: 'KP zadarma settings'
+  base_route_name: kp_zadarma.settings
+  names:
+    - kp_zadarma.settings

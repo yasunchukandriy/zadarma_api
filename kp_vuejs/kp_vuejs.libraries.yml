@@ -1,0 +1,20 @@
+vuejs:
+  version: 2.7.16
+  js:
+    /libraries/vue/dist/vue.min.js: { minified: true }
+
+vue-tel-input:
+  version: 5.15.0
+  css:
+    theme:
+      css/splide.min.css: {}
+      css/vue-tel-input.css: {}
+  js:
+    js/vue-tel-input.umd.min.js: {}
+  dependencies:
+    - kp_vuejs/vuejs
+
+axios:
+  version: 0.19.2
+  js:
+    /libraries/axios/dist/axios.min.js: { minified: true }

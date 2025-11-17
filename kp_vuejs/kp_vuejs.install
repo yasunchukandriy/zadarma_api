@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the kp_vuejs module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function kp_vuejs_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'runtime' || $phase === 'install') {
+    // Get services for file operations.
+    $file_system = \Drupal::service('file_system');
+
+    // Define library paths and files to check.
+    $libraries = [
+      'vue' => [
+        'path' => '/libraries/vue',
+        'file' => '/dist/vue.min.js',
+        'title' => t('Vue.js Library'),
+        'description_installed' => t('Vue.js is available.'),
+        'description_missing' => t('Vue.js is missing. Download from <a href="https://app.unpkg.com/@vue/compiler-sfc@2.7.16">UNPKG</a> and place dist/vue.min.js in /libraries/vue/dist/.'),
+      ],
+      'axios' => [
+        'path' => '/libraries/axios',
+        'file' => '/dist/axios.min.js',
+        'title' => t('Axios Library'),
+        'description_installed' => t('Axios is available.'),
+        'description_missing' => t('Axios is missing. Download from <a href="https://github.com/axios/axios/releases/tag/v0.19.2">GitHub</a> and place dist/axios.min.js in /libraries/axios/dist/.'),
+      ],
+    ];
+
+    foreach ($libraries as $key => $lib) {
+      $lib_path = $file_system->realpath(DRUPAL_ROOT . $lib['path']);
+      $exists = $lib_path && file_exists($lib_path . $lib['file']);
+
+      $requirements[$key . '_library'] = [
+        'title' => $lib['title'],
+        'value' => $exists ? t('Installed') : t('Missing'),
+        'severity' => $exists ? REQUIREMENT_OK : REQUIREMENT_WARNING,
+        'description' => $exists ? $lib['description_installed'] : $lib['description_missing'],
+      ];
+    }
+  }
+
+  return $requirements;
+}

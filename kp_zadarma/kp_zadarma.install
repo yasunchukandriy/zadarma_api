@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the kp_zadarma module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function kp_zadarma_requirements($phase) {
+  $requirements = [];
+
+  if (in_array($phase, ['install', 'update', 'runtime'])) {
+    // Array of libraries to check.
+    $libraries = [
+      [
+        'class' => '\Zadarma_API\Client',
+        'title' => t('Zadarma API Library'),
+        'description_installed' => t('The Zadarma API library is installed.'),
+        'description_missing' => t('The Zadarma API library is missing. Please install it using Composer: <code>composer require @command</code>.', ['@command' => '"zadarma/user-api-v1"']),
+      ],
+      [
+        'class' => '\libphonenumber\PhoneNumberUtil',
+        'title' => t('Libphonenumber Library'),
+        'description_installed' => t('The Libphonenumber library is installed.'),
+        'description_missing' => t('The Libphonenumber library is missing. Please install it using Composer: <code>composer require @command</code>.', ['@command' => '"giggsey/libphonenumber-for-php"']),
+      ],
+    ];
+
+    foreach ($libraries as $lib) {
+      $is_enabled = class_exists($lib['class']);
+      $requirement = [
+        'title' => $lib['title'],
+        'value' => $is_enabled ? t('Installed') : t('Missing'),
+        'severity' => $is_enabled ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+        'description' => $is_enabled ? $lib['description_installed'] : $lib['description_missing'],
+      ];
+
+      // Add to requirements array.
+      $key = strtolower(str_replace(' ', '_', $lib['title']->getUntranslatedString()));
+      $requirements[$key] = $requirement;
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function kp_zadarma_uninstall() {
+  $key = 'kp_zadarma_api_status_connect';
+  $state = \Drupal::state();
+  if ($state->has($key)) {
+    $state->delete($key);
+  }
+}

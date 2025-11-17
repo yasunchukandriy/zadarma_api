@@ -1,0 +1,7 @@
+kp_zadarma.settings:
+  path: '/admin/config/content/kp_zadarma_settings'
+  defaults:
+    _form: '\Drupal\kp_zadarma\Form\KpZadarmaSettingsForm'
+    _title: 'KP Zadarma Settings'
+  requirements:
+    _permission: 'administer site configuration'

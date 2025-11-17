@@ -1,0 +1,5 @@
+name: 'KP Vue.js'
+type: module
+description: 'Provides Vue.js, vue-tel-input, and Axios libraries for KP modules.'
+core_version_requirement: ^10 || ^11
+package: 'KP'

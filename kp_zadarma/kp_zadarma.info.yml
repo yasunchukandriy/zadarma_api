@@ -1,0 +1,10 @@
+name: 'KP Zadarma API'
+type: module
+description: 'Integrates Zadarma callback API with a Vue.js-powered phone input.'
+core_version_requirement: ^10 || ^11
+package: 'KP'
+configure: kp_zadarma.settings
+dependencies:
+  - drupal:rest
+  - drupal:time_field
+  - kp_vuejs:kp_vuejs

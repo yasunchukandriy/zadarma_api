@@ -1,0 +1,12 @@
+kp-zadarma-vue:
+  version: 1.0.1
+  css:
+    theme:
+      css/kp-zadarma.css: {}
+  js:
+    js/kp-zadarma-vue.js: {}
+  dependencies:
+    - core/drupal
+    - kp_vuejs/axios
+    - core/drupalSettings
+    - kp_vuejs/vue-tel-input

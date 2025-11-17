@@ -1,0 +1,7 @@
+{
+    "name": "drupal/kp_vuejs",
+    "description": "Vue.js integration for Drupal modules and themes.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "version": "1.0.0"
+}

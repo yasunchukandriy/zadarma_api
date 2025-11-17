@@ -1,0 +1,5 @@
+kp_zadarma.settings:
+  title: 'KP Zadarma Settings'
+  parent: system.admin_config_content
+  description: ''
+  route_name: kp_zadarma.settings

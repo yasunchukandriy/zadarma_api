@@ -1,0 +1,14 @@
+services:
+  kp_zadarma.api_client:
+    class: Zadarma_API\Client
+    arguments: ['@config.factory']
+    factory: ['@kp_zadarma.api_client_factory', 'create']
+  kp_zadarma.api_client_factory:
+    class: Drupal\kp_zadarma\ZadarmaApiClientFactory
+    arguments: ['@config.factory']
+  kp_zadarma.api_service:
+    class: Drupal\kp_zadarma\ZadarmaApiService
+    arguments: ['@kp_zadarma.api_client', '@logger.factory']
+  kp_zadarma.phone_number_validator:
+    class: Drupal\kp_zadarma\PhoneNumberValidator
+    arguments: ['@config.factory', '@logger.factory']

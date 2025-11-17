@@ -1,0 +1,11 @@
+{
+    "name": "drupal/kp_zadarma",
+    "description": "Integrates Zadarma callback API with a Vue.js-powered phone input.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "version": "1.0.0",
+    "require": {
+        "zadarma/user-api-v1": "^1.0",
+        "giggsey/libphonenumber-for-php": "^8.13"
+    }
+}
