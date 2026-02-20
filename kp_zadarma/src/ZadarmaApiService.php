@@ -58,7 +58,10 @@ class ZadarmaApiService {
       $status = TRUE;
     }
     catch (ApiException $e) {
-      $this->loggerFactory->get('kp_zadarma')->error('Zadarma API connection failed: @msg', ['@msg' => $e->getMessage(), 'exception' => $e]);
+      $this->loggerFactory->get('kp_zadarma')->error('Zadarma API connection failed: @msg', [
+        '@msg' => $e->getMessage(),
+        'exception' => $e,
+      ]);
       $status = FALSE;
     }
 

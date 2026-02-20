@@ -28,54 +28,54 @@ class KpZadarmaSettingsForm extends ConfigFormBase {
   /**
    * The state service.
    *
-   * @var StateInterface
+   * @var \Drupal\Core\State\StateInterface
    */
   protected StateInterface $state;
 
   /**
    * The messenger service.
    *
-   * @var MessengerInterface
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
 
   /**
    * The KP Zadarma API service.
    *
-   * @var ZadarmaApiService
+   * @var \Drupal\kp_zadarma\ZadarmaApiService
    */
   protected ZadarmaApiService $apiService;
 
   /**
    * The logger factory.
    *
-   * @var LoggerChannelFactoryInterface
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
   protected $loggerFactory;
 
   /**
    * The phone number validator service for validating phone numbers.
    *
-   * @var PhoneNumberValidator
+   * @var \Drupal\kp_zadarma\PhoneNumberValidator
    */
   protected PhoneNumberValidator $phoneNumberValidator;
 
   /**
    * Constructs a new KpZadarmaSettingsForm.
    *
-   * @param ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
-   * @param TypedConfigManagerInterface $typed_config_manager
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
    *   The typed configuration manager.
-   * @param StateInterface $state
+   * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param ZadarmaApiService $apiService
-   *    The Zadarma API service.
-   * @param LoggerChannelFactoryInterface $logger_factory
+   * @param \Drupal\kp_zadarma\ZadarmaApiService $apiService
+   *   The Zadarma API service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
-   * @param PhoneNumberValidator $phone_number_validator
+   * @param \Drupal\kp_zadarma\PhoneNumberValidator $phone_number_validator
    *   The phone number validator service.
    */
   public function __construct(

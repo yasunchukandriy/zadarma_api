@@ -78,19 +78,19 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function defaultConfiguration(): array {
     return [
-        'block_settings' => [
-          'weekday' => [
-            'enabled' => FALSE,
-            'time_to' => '',
-            'time_from' => '',
-          ],
-          'day_off' => [
-            'enabled' => FALSE,
-            'time_to' => '',
-            'time_from' => '',
-          ],
+      'block_settings' => [
+        'weekday' => [
+          'enabled' => FALSE,
+          'time_to' => '',
+          'time_from' => '',
         ],
-      ] + parent::defaultConfiguration();
+        'day_off' => [
+          'enabled' => FALSE,
+          'time_to' => '',
+          'time_from' => '',
+        ],
+      ],
+    ] + parent::defaultConfiguration();
   }
 
   /**

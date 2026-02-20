@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\kp_zadarma\Kernel;
 
+use Zadarma_API\Client;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Flood\FloodInterface;
@@ -19,6 +20,8 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
 
   /**
    * Modules required for this test.
+   *
+   * @var string[]
    */
   protected static $modules = ['kp_zadarma', 'rest', 'serialization'];
 
@@ -69,7 +72,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
    * Tests successful POST request handling.
    */
   public function testPostSuccess(): void {
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
     $mock_client->method('call')->willReturn(json_encode(['result' => 'OK', 'status' => 'success']));
 
     $resource = $this->createResource($mock_client);
@@ -85,7 +88,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
    * Tests POST with invalid phone number returns 400.
    */
   public function testPostInvalidPhoneNumber(): void {
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
 
     $resource = $this->createResource($mock_client);
     $request = $this->createRequest(['zadarma_phone_number' => 'invalid']);
@@ -111,7 +114,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
    * Tests POST with API exception returns 500.
    */
   public function testPostApiException(): void {
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
     $mock_client->method('call')->willThrowException(new ApiException('Connection failed'));
 
     $resource = $this->createResource($mock_client);
@@ -129,7 +132,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
     $flood = $this->createMock(FloodInterface::class);
     $flood->method('isAllowed')->willReturn(FALSE);
 
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
     $resource = $this->createResource($mock_client, $flood);
 
     $request = $this->createRequest(['zadarma_phone_number' => '+380971234567']);
@@ -143,7 +146,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
    * Tests POST with empty phone number returns 400.
    */
   public function testPostEmptyPhoneNumber(): void {
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
 
     $resource = $this->createResource($mock_client);
     $request = $this->createRequest(['zadarma_phone_number' => '']);
@@ -156,7 +159,7 @@ class ZadarmaCallbackResourceKernelTest extends KernelTestBase {
    * Tests POST with missing phone key returns 400.
    */
   public function testPostMissingPhoneKey(): void {
-    $mock_client = $this->createMock(\Zadarma_API\Client::class);
+    $mock_client = $this->createMock(Client::class);
 
     $resource = $this->createResource($mock_client);
     $request = $this->createRequest([]);
