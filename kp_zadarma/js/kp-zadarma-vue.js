@@ -6,6 +6,11 @@
 (function (Drupal, drupalSettings) {
   'use strict';
 
+  /**
+   * Timeout (ms) before auto-closing the success modal.
+   */
+  const AUTO_CLOSE_TIMEOUT = 20000;
+
   Drupal.behaviors.kpZadarmaBlock = {
     attach(context) {
       Object.entries(drupalSettings.kp_zadarma || {}).forEach(([id, settings]) => {
@@ -42,7 +47,7 @@
               <span>{{ Drupal.t('Do you have questions? We will help you!') }}</span>
               <span class="close" @click="closeModal">X</span>
             </div>
-            <div :class="getClassBlock">{{ successText }}</div>
+            <div :class="classBlock">{{ successText }}</div>
             <div v-if="!isSuccess" class="form">
               <vue-tel-input @input="validatePhone" v-bind="propsElement"></vue-tel-input>
               <button @click="submitPhone" type="submit" :disabled="isDisabled">{{ Drupal.t("I'm waiting for call!") }}</button>
@@ -69,11 +74,13 @@
             }
           }
         },
-        methods: {
-          getClassBlock: function() {
+        computed: {
+          classBlock() {
             return this.isSuccess ? 'success-message' : 'zadarma-modal-description';
-          },
-          validatePhone: function(phone, phoneObject) {
+          }
+        },
+        methods: {
+          validatePhone(phone, phoneObject) {
             this.phoneValue = phone;
             this.isError = false;
             this.isDisabled = true;
@@ -83,11 +90,10 @@
               this.isError = true;
             }
           },
-          showModal: function() {
+          showModal() {
             this.isModal = true;
           },
-          submitPhone: function() {
-            const me = this;
+          submitPhone() {
             this.isDisabled = true;
 
             axios.get('/session/token').then(res => {
@@ -104,19 +110,17 @@
                   }
                 }
               )
-                .then(
-                  function(resp) {
-                    if (resp.data.data) {
-                      let dataVal = resp.data.data;
-                      const data = (typeof dataVal === 'string') ? JSON.parse(dataVal) : dataVal;
-                      if (data.status === 'success') {
-                        me.isSuccess = true;
-                        setTimeout(function() { me.closeModal(); }, 20000);
-                      }
+                .then((resp) => {
+                  if (resp.data.data) {
+                    let dataVal = resp.data.data;
+                    const data = (typeof dataVal === 'string') ? JSON.parse(dataVal) : dataVal;
+                    if (data.status === 'success') {
+                      this.isSuccess = true;
+                      setTimeout(() => { this.closeModal(); }, AUTO_CLOSE_TIMEOUT);
                     }
-                  },
-                )
-                .catch(error => {
+                  }
+                })
+                .catch((error) => {
                   if (error.response) {
                     if (error.response.status === 400) {
                       this.isError = true;
@@ -128,15 +132,13 @@
                   else {
                     console.error('Submission error:', error.message);
                   }
-                })
-                .finally(function() {
-              });
+                });
             });
           },
-          closeModal: function() {
+          closeModal() {
             this.isModal = false;
           },
-          shouldSkipByDateName: function(dataTime, dayName) {
+          shouldSkipByDateName(dataTime, dayName) {
             switch (dataTime) {
               case 'weekday':
                 if (dayName === 'Sunday' || dayName === 'Saturday') {
@@ -152,8 +154,8 @@
             return false;
           }
         },
-        mounted: function() {
-          if (this.item.settings && this.item.settings.length > 0) {
+        mounted() {
+          if (this.item.settings && Object.keys(this.item.settings).length > 0) {
             const dt = new Date();
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const hour = dt.getHours();
@@ -166,8 +168,8 @@
               if (this.shouldSkipByDateName(key, dayName)) {
                 continue;
               }
-              const timeTo = this.item.settings[key].to.split('.').map(Number);
-              const timeFrom = this.item.settings[key].from.split('.').map(Number);
+              const timeTo = this.item.settings[key].to.split(':').map(Number);
+              const timeFrom = this.item.settings[key].from.split(':').map(Number);
               if ((hour > timeFrom[0] && hour < timeTo[0]) ||
                 (hour === timeFrom[0] && minute >= timeFrom[1]) ||
                 (hour === timeTo[0] && minute <= timeTo[1])) {

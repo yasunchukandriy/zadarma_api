@@ -11,26 +11,19 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 class ZadarmaApiClientFactory {
 
   /**
-   * The configuration factory.
-   *
-   * @var ConfigFactoryInterface
-   */
-  protected ConfigFactoryInterface $configFactory;
-
-  /**
    * Constructs a new ZadarmaApiClientFactory.
    *
-   * @param ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The configuration factory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
-  }
+  public function __construct(
+    protected readonly ConfigFactoryInterface $configFactory,
+  ) {}
 
   /**
    * Creates a Zadarma API client.
    *
-   * @return Client|null
+   * @return \Zadarma_API\Client|null
    *   The Zadarma API client or null if the library is missing.
    */
   public function create(): ?Client {

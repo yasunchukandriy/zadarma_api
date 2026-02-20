@@ -16,31 +16,17 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class ZadarmaApiService {
 
   /**
-   * The Zadarma API client.
-   *
-   * @var Client|null
-   */
-  protected ?Client $client;
-
-  /**
-   * The logger factory.
-   *
-   * @var LoggerChannelFactoryInterface
-   */
-  protected $loggerFactory;
-
-  /**
    * Constructs a new ZadarmaApiService object.
    *
-   * @param Client|null $client
+   * @param \Zadarma_API\Client|null $client
    *   The Zadarma API client or NULL if not available.
-   * @param LoggerChannelFactoryInterface $logger_factory
-   * *   The logger factory.
- */
-  public function __construct(?Client $client, LoggerChannelFactoryInterface $logger_factory) {
-    $this->client = $client;
-    $this->loggerFactory = $logger_factory;
-  }
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
+   *   The logger factory.
+   */
+  public function __construct(
+    protected readonly ?Client $client,
+    protected readonly LoggerChannelFactoryInterface $loggerFactory,
+  ) {}
 
   /**
    * Checks the API connection by requesting the balance.

@@ -143,11 +143,12 @@ class KpZadarmaSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $settings->get('zadarma_api_key'),
     ];
+    $existing_secret = $settings->get('zadarma_api_secret');
     $form['zadarma_api_settings']['zadarma_api_secret'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('API secret'),
-      '#required' => TRUE,
-      '#default_value' => $settings->get('zadarma_api_secret'),
+      '#required' => empty($existing_secret),
+      '#description' => $existing_secret ? $this->t('Leave blank to keep the current secret.') : '',
     ];
     $form['zadarma_api_settings']['zadarma_api_from'] = [
       '#type' => 'textfield',
@@ -192,13 +193,17 @@ class KpZadarmaSettingsForm extends ConfigFormBase {
     $keys = [
       'zadarma_api_key',
       'zadarma_api_from',
-      'zadarma_api_secret',
       'zadarma_api_predicted',
     ];
 
     // Saving the main API settings.
     foreach ($keys as $key) {
       $config->set($key, $values[$key]);
+    }
+
+    // Only update the secret if a new value was provided.
+    if (!empty($values['zadarma_api_secret'])) {
+      $config->set('zadarma_api_secret', $values['zadarma_api_secret']);
     }
 
     $config->save();

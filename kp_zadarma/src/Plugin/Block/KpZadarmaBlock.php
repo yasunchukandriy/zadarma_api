@@ -2,7 +2,6 @@
 
 namespace Drupal\kp_zadarma\Plugin\Block;
 
-
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +10,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a generate 'KP Zadarma' block.
+ * Provides a 'KP Zadarma' block.
  *
  * @Block(
  *   id = "kp_zadarma_block",
@@ -24,14 +23,14 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * The state service.
    *
-   * @var StateInterface
+   * @var \Drupal\Core\State\StateInterface
    */
   protected StateInterface $state;
 
   /**
    * The REST resource plugin manager.
    *
-   * @var ResourcePluginManager
+   * @var \Drupal\rest\Plugin\Type\ResourcePluginManager
    */
   protected ResourcePluginManager $restManager;
 
@@ -43,14 +42,19 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
    * @param string $plugin_id
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
-   *   The configuration factory.
-   * @param StateInterface $state
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param ResourcePluginManager $restManager
-   *    The REST resource plugin manager.
+   * @param \Drupal\rest\Plugin\Type\ResourcePluginManager $restManager
+   *   The REST resource plugin manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,
-                              StateInterface $state, ResourcePluginManager $restManager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    StateInterface $state,
+    ResourcePluginManager $restManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->state = $state;
     $this->restManager = $restManager;
@@ -129,8 +133,7 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * Saves the block settings after the form is submitted.
    */
-  public function blockSubmit($form, FormStateInterface $form_state): void
-  {
+  public function blockSubmit($form, FormStateInterface $form_state): void {
     foreach (['weekday', 'day_off'] as $period) {
       $container = $form_state->getValue([$period, 'container_' . $period]);
 
@@ -148,8 +151,7 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * Validates the block form fields for correct time input.
    */
-  public function blockValidate($form, FormStateInterface $form_state): void
-  {
+  public function blockValidate($form, FormStateInterface $form_state): void {
     foreach (['weekday', 'day_off'] as $period) {
       $enabled = (bool) $form_state->getValue([$period, 'enabled']);
       $container = $form_state->getValue([$period, 'container_' . $period]);
@@ -219,6 +221,7 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
       ],
       '#cache' => [
         'max-age' => 0,
+        'tags' => ['config:kp_zadarma.settings'],
       ],
     ];
   }
@@ -226,13 +229,10 @@ class KpZadarmaBlock extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * Builds a time-only datetime form element.
    *
-   * This helper method creates a Drupal datetime form element configured
-   * to display and edit only the time (hours and minutes), without a date.
-   *
    * @param string $name
    *   The machine name of the element (used for title generation).
-   * @param ?string$value
-   *   The default time value in 'H.i' or 'H:i' format, or NULL if none.
+   * @param string|null $value
+   *   The default time value in 'H:i' format, or NULL if none.
    *
    * @return array
    *   A renderable form element array for a time-only datetime field.
